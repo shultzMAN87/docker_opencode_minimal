@@ -1,0 +1,23 @@
+{
+  "mcp": {
+    "everything": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-everything"],
+      "enabled": false
+    },
+    "fetch": {
+      "type": "local",
+      "command": ["uvx", "mcp-server-fetch"],
+      "enabled": true
+    },
+    "example-remote": {
+      "type": "remote",
+      "url": "http://host.docker.internal:8000/mcp",
+      "oauth": false,
+      "headers": {
+        "Authorization": "Bearer {env:EXAMPLE_MCP_TOKEN}"
+      },
+      "enabled": false
+    }
+  }
+}

@@ -1,0 +1,28 @@
+services:
+  opencode:
+    build:
+      context: .
+      args:
+        OPENCODE_VERSION: ${OPENCODE_VERSION:-1.19.3}
+    image: opencode-mcp:${OPENCODE_VERSION:-1.19.3}
+    container_name: opencode
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    ports:
+      - "${OPENCODE_PORT:-4096}:4096"
+    # Ключи провайдеров, пароль веб-интерфейса и секреты для MCP
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      # Рабочая папка с проектом, который правит агент
+      - ${WORKSPACE_DIR:-./workspace}:/workspace
+      # Сессии, история и ключи провайдеров (/connect) переживают пересоздание контейнера
+      - opencode-data:/home/node/.local/share/opencode
+    extra_hosts:
+      # Доступ из контейнера к сервисам на хосте (MCP-серверы, локальные LLM)
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  opencode-data:
